@@ -5,7 +5,7 @@ import unittest
 
 from mockito import any, mock, when, unstub
 
-from bcipy.feedback.visual.visual_feedback import VisualFeedback
+from bcipy.feedback.visual.visual_feedback import VisualFeedback, FeedbackType
 from bcipy.helpers.load import load_json_parameters
 
 
@@ -60,6 +60,7 @@ class TestVisualFeedback(unittest.TestCase):
             ).thenReturn(self.image_mock)
 
         when(psychopy.visual).Rect(
+            fillColor=any(),
             win=self.display,
             width=any(),
             height=any(),
@@ -98,7 +99,14 @@ class TestVisualFeedback(unittest.TestCase):
     def test_feedback_administer_image(self):
         test_stimulus = 'bcipy/static/images/testing_images/white.png'
         resp = self.visual_feedback.administer(
-            test_stimulus, message='Correct:')
+            test_stimulus, message='Correct:', stimuli_type=FeedbackType.IMAGE)
+
+        self.assertTrue(isinstance(resp, list))
+
+    def test_feedback_administer_shape(self):
+        test_stimulus = 'null'
+        resp = self.visual_feedback.administer(
+            test_stimulus, message='Correct:', stimuli_type=FeedbackType.SHAPE)
 
         self.assertTrue(isinstance(resp, list))
 
@@ -106,6 +114,7 @@ class TestVisualFeedback(unittest.TestCase):
         test_stimulus = 'bcipy/static/images/testing_images/white.png'
         assertion = 'bcipy/static/images/testing_images/white.png'
         resp = self.visual_feedback.administer(
-            test_stimulus, message='Correct:', compare_assertion=assertion)
+            test_stimulus, message='Correct:', compare_assertion=assertion,
+            stimuli_type=FeedbackType.IMAGE)
 
         self.assertTrue(isinstance(resp, list))
