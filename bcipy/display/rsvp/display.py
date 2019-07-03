@@ -156,7 +156,15 @@ class RSVPDisplay(object):
                 mask=None,
                 pos=self.stimuli_pos,
                 ori=0.0)
+        
+        self.stimulus_cache = {}
 
+    def init_stimulus_cache(self, alphabet):
+        """Create a cache of Stim objects that can be retrieved for display."""
+        for item in alphabet:
+            if not self.is_txt_stim:
+                self.stimulus_cache[item] = self.create_img_stim(item, self.stimuli_height)
+    
     def draw_static(self):
         """Draw static elements in a stimulus."""
         self.task.draw()
@@ -227,11 +235,9 @@ class RSVPDisplay(object):
 
             # Set the Stimuli attrs
             if self.stimuli_sequence[idx].endswith('.png'):
-                self.sti = self.create_stimulus(mode='image', height_int=this_stimuli_size)
-                self.sti.image = self.stimuli_sequence[idx]
-                self.sti.size = resize_image(self.sti.image, self.sti.win.size, this_stimuli_size)
-                sti_label = path.splitext(
-                    path.basename(self.stimuli_sequence[idx]))[0]
+                image_path = self.stimuli_sequence[idx]
+                self.sti = self.get_or_create_img_stim(image_path, this_stimuli_size)
+                sti_label = path.splitext(path.basename(image_path))[0]
             else:
                 # text stimulus
                 self.sti = self.create_stimulus(mode='text', height_int=this_stimuli_size)
@@ -340,6 +346,31 @@ class RSVPDisplay(object):
         # Draw and flip the screen.
         wait_message.draw()
         self.window.flip()
+
+    def get_or_create_img_stim(self, image_path, height_int):
+        """Get the image stimulus for the given path. If it's already cached
+        the stim is pulled from the cache, otherwise it is created and cached
+        for future use."""
+        if image_path in self.stimulus_cache:
+            stim = self.stimulus_cache[image_path]
+            # Check size, update if different
+            if(max(stim.size) != height_int):
+                stim = self.create_img_stim(image_path, height_int)
+        else:                    
+            stim = self.create_img_stim(image_path, height_int)
+            self.stimulus_cache[image_path] = stim
+        return stim
+
+    def create_img_stim(self, image_path: str, height_int: int):
+        self.logger.debug(f"Creating stim: {image_path}")
+        return visual.ImageStim(
+            win=self.window,
+            image=image_path,
+            mask=None,
+            units='',
+            pos=self.stimuli_pos,
+            size=resize_image(image_path, self.window.size, height_int),
+            ori=0.0)
 
     def create_stimulus(self, height_int: int, mode: str='text'):
         """Create Stimulus.

@@ -68,6 +68,7 @@ class RSVPIconToIconTask(Task):
         self.rsvp = _init_icon_to_icon_display_task(
             self.parameters, self.window, self.daq, self.static_clock,
             self.experiment_clock, is_word)
+
         self.file_save = file_save
         self.is_word = is_word
 
@@ -118,6 +119,8 @@ class RSVPIconToIconTask(Task):
 
         match_type = 'Word' if self.is_word else 'Icon'
         self.session_description = f'Icon to {match_type} Matching'
+        
+        self.rsvp.init_stimulus_cache(alphabet=[self.img_path(img) for img in self.alp])
 
     def img_path(self, alphabet_item):
         """Return the full image path for the given alphabet item. If the item
