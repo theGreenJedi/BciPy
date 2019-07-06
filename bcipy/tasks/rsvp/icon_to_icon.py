@@ -56,6 +56,7 @@ class RSVPIconToIconTask(Task):
         self.window = win
         self.frame_rate = self.window.getActualFrameRate()
         self.parameters = parameters
+        self.parameters['is_txt_stim'] = False
         self.daq = daq
         self.static_clock = core.StaticPeriod(screenHz=self.frame_rate)
         self.experiment_clock = core.Clock()
