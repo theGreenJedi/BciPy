@@ -122,6 +122,11 @@ class RSVPIconToIconTask(Task):
         
         self.rsvp.init_stimulus_cache(alphabet=[self.img_path(img) for img in self.alp])
 
+        self.feedback = VisualFeedback(
+            display=self.window,
+            parameters=self.parameters,
+            clock=self.experiment_clock)
+
     def img_path(self, alphabet_item):
         """Return the full image path for the given alphabet item. If the item
         ends with .png it's returned as is."""
@@ -224,12 +229,8 @@ class RSVPIconToIconTask(Task):
 
     def display_feedback(self, selection: str, correct: bool):
         """Display feedback for the given selection."""
-        feedback = VisualFeedback(
-            display=self.window,
-            parameters=self.parameters,
-            clock=self.experiment_clock)
-        feedback.message_color = 'green' if correct else 'red'
-        feedback.administer(
+        self.feedback.message_color = 'green' if correct else 'red'
+        self.feedback.administer(
             self.img_path(selection),
             compare_assertion=None,
             message='Decision: ',
