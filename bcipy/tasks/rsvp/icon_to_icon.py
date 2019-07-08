@@ -15,7 +15,8 @@ from bcipy.display.rsvp.mode.icon_to_icon import IconToIconDisplay
 from bcipy.feedback.visual.visual_feedback import VisualFeedback, FeedbackType
 from bcipy.helpers.task import (
     alphabet, fake_copy_phrase_decision, get_user_input,
-    process_data_for_decision, trial_complete_message)
+    trial_complete_message)
+from bcipy.helpers.decision import process_data_for_decision
 from bcipy.helpers.save import _save_session_related_data
 from bcipy.helpers.signal_model import CopyPhraseWrapper
 from bcipy.helpers.stimuli import generate_icon_match_images
