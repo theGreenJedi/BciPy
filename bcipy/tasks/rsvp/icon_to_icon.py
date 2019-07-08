@@ -119,7 +119,7 @@ class RSVPIconToIconTask(Task):
 
         match_type = 'Word' if self.is_word else 'Icon'
         self.session_description = f'Icon to {match_type} Matching'
-        
+
         self.rsvp.init_stimulus_cache(alphabet=[self.img_path(img) for img in self.alp])
 
         self.feedback = VisualFeedback(
@@ -127,6 +127,22 @@ class RSVPIconToIconTask(Task):
             parameters=self.parameters,
             clock=self.experiment_clock)
         self.feedback_msg_stim = self.feedback._construct_message('Decision: ')
+        self.init_feedback_stim()
+
+    def init_feedback_stim(self):
+        """Create stimulus objects used for feedback and cache
+        for quick access."""
+
+        self.feedback_cache = {}
+        for img in self.alp:
+            path = self.img_path(img)
+            stim = self.feedback._construct_stimulus(
+                path,
+                pos=self.feedback.pos_stim,
+                line_color=None,
+                fill_color=None,
+                stimuli_type=FeedbackType.IMAGE)
+            self.feedback_cache[path] = stim
 
     def img_path(self, alphabet_item):
         """Return the full image path for the given alphabet item. If the item
@@ -232,11 +248,9 @@ class RSVPIconToIconTask(Task):
         """Display feedback for the given selection."""
         msg_color = 'green' if correct else 'red'
         self.feedback_msg_stim.color = msg_color
-        self.feedback.administer(
-            self.img_path(selection),
-            compare_assertion=None,
-            message_stim=self.feedback_msg_stim,
-            stimuli_type=FeedbackType.IMAGE)
+        path = self.img_path(selection)
+        self.feedback.administer_stim(self.feedback_cache[path],
+                                      self.feedback_msg_stim)
 
     def write_data(self, correct_trials: int, selections: int):
         """Write trial data to icon_data.csv in file save location."""

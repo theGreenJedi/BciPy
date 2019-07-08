@@ -48,7 +48,6 @@ class VisualFeedback(Feedback):
             pos=None,
             line_color='blue',
             fill_color='blue',
-            message_stim=None,
             message=None,
             compare_assertion=None,
             stimuli_type=FeedbackType.TEXT):
@@ -60,9 +59,7 @@ class VisualFeedback(Feedback):
         """
         timing = []
 
-        if message_stim:
-            message_stim.draw()
-        elif message:
+        if message:
             message = self._construct_message(message)
             message.draw()
 
@@ -84,6 +81,22 @@ class VisualFeedback(Feedback):
                 fill_color,
                 stimuli_type)
 
+        self._show_stimuli(stim)
+        time = ['visual_feedback', self.clock.getTime()]
+
+        core.wait(self.feedback_length)
+        timing.append(time)
+
+        return timing
+
+    def administer_stim(self, stim, message_stim=None):
+        """
+        Administer visual feedback with stimulus that has already been created.        
+        """
+        timing = []
+
+        if message_stim:
+            message_stim.draw()
         self._show_stimuli(stim)
         time = ['visual_feedback', self.clock.getTime()]
 
