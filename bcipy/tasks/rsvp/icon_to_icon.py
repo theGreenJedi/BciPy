@@ -126,6 +126,7 @@ class RSVPIconToIconTask(Task):
             display=self.window,
             parameters=self.parameters,
             clock=self.experiment_clock)
+        self.feedback_msg_stim = self.feedback._construct_message('Decision: ')
 
     def img_path(self, alphabet_item):
         """Return the full image path for the given alphabet item. If the item
@@ -229,11 +230,12 @@ class RSVPIconToIconTask(Task):
 
     def display_feedback(self, selection: str, correct: bool):
         """Display feedback for the given selection."""
-        self.feedback.message_color = 'green' if correct else 'red'
+        msg_color = 'green' if correct else 'red'
+        self.feedback_msg_stim.color = msg_color
         self.feedback.administer(
             self.img_path(selection),
             compare_assertion=None,
-            message='Decision: ',
+            message_stim=self.feedback_msg_stim,
             stimuli_type=FeedbackType.IMAGE)
 
     def write_data(self, correct_trials: int, selections: int):

@@ -48,6 +48,7 @@ class VisualFeedback(Feedback):
             pos=None,
             line_color='blue',
             fill_color='blue',
+            message_stim=None,
             message=None,
             compare_assertion=None,
             stimuli_type=FeedbackType.TEXT):
@@ -59,7 +60,9 @@ class VisualFeedback(Feedback):
         """
         timing = []
 
-        if message:
+        if message_stim:
+            message_stim.draw()
+        elif message:
             message = self._construct_message(message)
             message.draw()
 
