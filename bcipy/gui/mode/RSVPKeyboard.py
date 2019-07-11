@@ -8,6 +8,7 @@ import wx
 
 from bcipy.gui.gui_main import BCIGui
 from bcipy.helpers.load import load_json_parameters
+from bcipy.helpers.system_utils import kill_other_python_processes
 
 from bcipy.tasks.task_registry import ExperimentType
 
@@ -79,6 +80,7 @@ class RSVPKeyboard(BCIGui):
 
     def refresh(self, _event: wx.Event) -> None:
         self.event_started = False
+        kill_other_python_processes()
 
     def load_items_from_txt(self, _event):
         """Loads user directory names from the data path defined in

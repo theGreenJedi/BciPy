@@ -25,7 +25,7 @@ def git_dir() -> str:
 
 def git_hash() -> Optional[str]:
     """Git Hash.
-    
+
     Returns an abbreviated git sha hash if this code is being run from a
     git cloned version of bcipy; otherwise returns an empty string.
 
@@ -167,3 +167,11 @@ def auto_str(cls):
 
     cls.__str__ = __str__
     return cls
+
+def kill_other_python_processes():
+    """Kills all other running python processes."""
+    this_process_id = os.getpid()
+    for process in psutil.process_iter():
+        if "python" in process.name():
+            if process.pid != this_process_id:
+                process.terminate()
