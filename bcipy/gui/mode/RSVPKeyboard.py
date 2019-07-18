@@ -48,6 +48,7 @@ class RSVPKeyboard(BCIGui):
             mode = 'RSVP'
             cmd = 'python bci_main.py -m {} -t {} -u {}'.format(
                 mode, experiment_type, username)
+            print('\nStarting task %s...' % ExperimentType.by_mode()['RSVP'][event.GetEventObject().GetId() - 1])
 
             subprocess.Popen(cmd, shell=True)
 
