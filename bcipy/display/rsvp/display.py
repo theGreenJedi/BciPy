@@ -1,6 +1,6 @@
 import logging
 import os.path as path
-from typing import Callable, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 from psychopy import core, visual
 
@@ -22,27 +22,27 @@ class RSVPDisplay(object):
             window: visual.Window,
             static_clock,
             experiment_clock: core.Clock,
-            marker_writer: Optional[MarkerWriter]=None,
-            task_color: List[str]=['white'],
-            task_font: str='Times',
-            task_pos: Tuple[float, float]=(-.8, .9),
-            task_height: float=0.2,
-            task_text: str='1/100',
-            info_color: List[str]=['white'],
-            info_text: List[str]=['Information Text'],
-            info_font: List[str]=['Times'],
+            marker_writer: Optional[MarkerWriter] = None,
+            task_color: List[str] = ['white'],
+            task_font: str = 'Times',
+            task_pos: Tuple[float, float] = (-.8, .9),
+            task_height: float = 0.2,
+            task_text: str = '1/100',
+            info_color: List[str] = ['white'],
+            info_text: List[str] = ['Information Text'],
+            info_font: List[str] = ['Times'],
             info_pos=[(.8, .9)],
             info_height=[0.2],
             stim_font='Times',
             stim_pos=(-.8, .9),
             stim_height=0.2,
-            stim_sequence: List[str]=['a'] * 10,
-            stim_colors: List[str]=['white'] * 10,
-            stim_timing: List[float]=[1] * 10,
-            is_txt_stim: bool=True,
-            static_time: float=.05,
-            trigger_type: str='image',
-            space_char: SPACE_CHAR=SPACE_CHAR):
+            stim_sequence: List[str] = ['a'] * 10,
+            stim_colors: List[str] = ['white'] * 10,
+            stim_timing: List[float] = [1] * 10,
+            is_txt_stim: bool = True,
+            static_time: float = .05,
+            trigger_type: str = 'image',
+            space_char: SPACE_CHAR = SPACE_CHAR):
         """Initialize RSVP window parameters and objects.
 
         PARAMETERS:
@@ -247,7 +247,8 @@ class RSVPDisplay(object):
                     # If we are in full-screen, text size in Psychopy norm units
                     # is monitor width/monitor height
                     if self.window.size[0] == info['RESOLUTION'][0]:
-                        new_text_width = info['RESOLUTION'][0] / info['RESOLUTION'][1]
+                        new_text_width = info['RESOLUTION'][0] / \
+                            info['RESOLUTION'][1]
                     else:
                         # If not, text width is calculated relative to both
                         # monitor size and window size
@@ -307,8 +308,10 @@ class RSVPDisplay(object):
                 text(string): new text for task state
                 color_list(list[string]): list of colors for each
         """
-        task_state_text = visual.TextStim(win=self.window, font=self.task.font, text=text)
-        x_task_position = task_state_text.boundingBox[0] / self.window.size[0] - 1
+        task_state_text = visual.TextStim(
+            win=self.window, font=self.task.font, text=text)
+        x_task_position = task_state_text.boundingBox[0] / \
+            self.window.size[0] - 1
         task_pos = (x_task_position, 1 - self.task.height)
 
         self.update_task(text=text, color_list=color_list, pos=task_pos)
@@ -351,7 +354,7 @@ class RSVPDisplay(object):
         wait_message.draw()
         self.window.flip()
 
-    def create_stimulus(self, height_int: int, mode: str='text'):
+    def create_stimulus(self, height_int: int, mode: str = 'text'):
         """Create Stimulus.
 
         Returns a TextStim or ImageStim object.
