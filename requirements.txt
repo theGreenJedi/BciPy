@@ -7,7 +7,7 @@ olefile==0.44
 PyOpenGL==3.1.0
 pyOpenSSL==17.5.0
 mne==0.17.0
-lxml==4.1.1
+lxml==4.6.5
 PsychoPy==3.0.4
 pytz==2017.2
 six==1.11.0
